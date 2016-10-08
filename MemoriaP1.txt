@@ -57,7 +57,7 @@ Parte II: Inyección remota de comandos en el sistema de ficheros remotos Samba.
 En primer lugar, para realizar esta segunda parte de la práctica, se buscó información sobre
 la herramienta "Metasploit Framework" para saber qué íbamos a utilizar. "Metasploit Framework"
 es un subproyecto de "Metasplit" cuya función principal es desarrollar y ejecutar exploits
-contra una máquina remota. La nueva herramienta la vamos a utilizar en esta parte de la práctica
+contra una máquina remota. La nueva herramienta se va a utilizar en esta parte de la práctica
 para explotar y penetrar en las vulnerabilidades del objetivo analizado mediante "nmap" en el
 punto anterior. La herramienta funciona a base de módulos, cada uno de ellos aprovechan distintas
 vulnerabilidades en diferentes servicios.
@@ -154,7 +154,7 @@ en el apartado 2 en la máquina kali a segundo plano(aquella en la que se había
 comprometida). Esto se consigue con el pulsando simultáneamente "<Ctrl> y Z", y comprobando si se ha
 realizado correctamente mostrando las sesiones abiertas con "session -l".
 
-A continuación, se abre una nueva sesión escogiendo un nuevo módulo, en este caso, para obtener los
+A continuación se escoge un nuevo módulo, en este caso, para obtener los
 hashes de las contraseñas contenidas en /etc/shadow de la máquina comprometida. El procedimiento es
 análogo al del apartado anterior, pero eligiendo el módulo correspondiente:
 
