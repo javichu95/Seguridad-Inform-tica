@@ -1,4 +1,3 @@
-package practica6;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,56 +9,63 @@ public class bruteforce_caesar {
 	private static boolean correcto = false;
 	private static Scanner entrada = new Scanner(System.in);
 	
+	/*
+	 * Método princpial que realiza el descifrado de César por fuerza bruta.
+	 */
 	public static void main(String[] args) {
-		if (args.length < 0 || args.length > 1) {
+		if (args.length != 1) {	// Se comprueban el número de argumentos.
 			System.err.println("Error en los argumentos");
 			System.exit(1);
 		}
 		try {
-			fic = new Scanner(new File(args[0]));
-			String texto = "";
-			while(fic.hasNextLine()) {
+			fic = new Scanner(new File(args[0]));	// Se crea el scanner de entrada.
+			String texto = "";		// Texto total leido del fichero.
+			while(fic.hasNextLine()) {		// Se leen todas las líneas del fichero.
 				texto = texto + fic.nextLine();
 			}
+			// Se descifra probando todos los desplazamientos.
 			for(int i = 0; i<=25 && !correcto;i++) {
 				descifrar(texto,i);
 			}
-		} catch(FileNotFoundException e) {
+		} catch(FileNotFoundException e) {		// Se muestra la posible excepción.
 			System.err.println("Fichero no encontrado");
 			System.exit(1);
 		}
 	}
 	
+	/*
+	 * Método que descifra el mensaje con un cierto desplazamiento dado.
+	 */
 	private static void descifrar(String texto, int caracter) {
-		caracter = caracter +'A';
+		caracter = caracter +'A';		// Se asigna el caracter inicial.
 		int desplazamiento;
-		if(texto.charAt(0) > caracter) {
+		if(texto.charAt(0) > caracter) {		// Se calcula el desplazamiento.
 			desplazamiento = texto.charAt(0) - caracter;
 		} else {
 			desplazamiento = caracter - texto.charAt(0);
 		}
-		String descifrado = "";
-		for(int i = 0; i < texto.length(); i++) {
-			char leido = texto.charAt(i);
-			if(leido - 'A' <= 25 && leido - 'A' >= 0) {
+		String descifrado = "";		// String del texto descifrado.
+		for(int i = 0; i < texto.length(); i++) {	// Se recorren los distintos caracteres.
+			char leido = texto.charAt(i);	// Se lee el caracter.
+			if(leido - 'A' <= 25 && leido - 'A' >= 0) {	// Se comprueba si es una letra.
 				int conversion = leido - desplazamiento;
-				if(conversion < 65) {
+				if(conversion < 65) {	// Se realiza la conversión si se sale del rango.
 					conversion = 91 - (65 - conversion);
 				} else if(conversion > 90) {
 					conversion = 64 + (conversion - 90);
 				}
 				descifrado = descifrado + ((char)(conversion));
-			} else {
+			} else {		// Si no es una letra lo escribe tal cual.
 				descifrado = descifrado + leido;
 			}
 		}
+		// Se muestra por pantalla el desplazamiento utilizado y el texto descifrado.
 		System.out.println("Desplazamiento utilizado: " + desplazamiento);
 		System.out.println("Si el descifrado es correcto introduzca 'Ok' (si no introduzca cualquier cosa):\n"+descifrado);
-		String respuesta = entrada.nextLine();
+		String respuesta = entrada.nextLine();	// Se lee la respuesta del usuario.
 		respuesta = respuesta.toLowerCase();
 		if(respuesta.equals("ok")) {
-			correcto = true;
-			
+			correcto = true;		// Se asigna el valor a la variable según la respuesta.
 		}
 	}
 }

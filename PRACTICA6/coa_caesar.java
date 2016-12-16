@@ -17,9 +17,13 @@ public class coa_caesar {
 	 */
 	public static void main(String [] args){
 		
-		//nombre = args[1];
+		if (args.length != 1) {	// Se comprueban el número de argumentos.
+			System.err.println("Error en los argumentos");
+			System.exit(1);
+		}
+	
+		nombre = args[1];		// Se guarda el nombre del fichero.
 		
-		nombre = "cryptogram1.txt";
 		Scanner texto = null; 	// Scanner para leer la entrada.
 		try{
 			texto = new Scanner(new File(nombre));	// Se asocia al fichero.
@@ -90,6 +94,8 @@ public class coa_caesar {
 				}
 				System.out.println(salida);	// Se escribe el texto decodificado.
 				indice--;	// Se actualiza el índice de frecuencias.
+				System.out.println("Si el descifrado es correcto introduzca 'Ok' "
+						+ "(si no introduzca cualquier cosa):");
 				leido = entrada.nextLine();	// Se lee la entrada del teclado.
 			}
 			entrada.close();		// Se cierra la entrada.
