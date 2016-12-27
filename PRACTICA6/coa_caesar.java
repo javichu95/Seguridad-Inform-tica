@@ -11,18 +11,26 @@ public class coa_caesar {
 	private static String nombre = null;		// Nombre del fichero de entrada.
 	private static int maxFrec = 'E'-'A';	// Letra con la máxima frecuencia.
 	private static String textoLeido = "";	// String del texto del fichero.
+	private static String idioma = null;
 
 	/*
 	 * Método principal que lanza el descifrado de César.
 	 */
 	public static void main(String [] args){
 		
-		if (args.length != 1) {	// Se comprueban el número de argumentos.
+		if (args.length != 3) {	// Se comprueban el número de argumentos.
+			System.err.println("Error en los argumentos");
+			System.exit(1);
+		}
+		
+		if(!args[1].equals("-idioma") || (!args[2].equals("español") 
+				&& !args[2].equals("ingles"))){
 			System.err.println("Error en los argumentos");
 			System.exit(1);
 		}
 	
 		nombre = args[0];		// Se guarda el nombre del fichero.
+		idioma = args[2];		// Se guarda el idioma escogido.
 		
 		Scanner texto = null; 	// Scanner para leer la entrada.
 		try{
@@ -35,6 +43,17 @@ public class coa_caesar {
 		for(int i=0; i<alfFrec.length; i++){
 			alfFrec[i][0] = i;
 		}
+		
+		obtenerFrec(texto);
+		texto.close();		// Se cierra el scanner.
+		ordenar(0, alfFrec.length-1);	// Se ordenan las letras por frecuencia.
+		descifrar();		// Se descifra el mensaje.
+	}
+	
+	/*
+	 * Método que obtiene la frecuencia de las letras.
+	 */
+	private static void obtenerFrec(Scanner texto){
 		while(texto.hasNextLine()){		// Se leen todas las líneas del fichero.
 			String linea = texto.nextLine();
 			textoLeido += linea;	// Se acumula en el string del texto total.
@@ -45,9 +64,6 @@ public class coa_caesar {
 				}
 			}
 		}
-		texto.close();		// Se cierra el scanner.
-		ordenar(0, alfFrec.length-1);	// Se ordenan las letras por frecuencia.
-		descifrar();		// Se descifra el mensaje.
 	}
 	
 	/*
@@ -66,7 +82,7 @@ public class coa_caesar {
 			String leido = "";	// String leido por teclado.
 			int despReal = 0;	// Desplazamiento real que puede ser negativo.
 			int despMostrar = 0;	// Desplazamiento que se muestra que siempre es positivo.
-			while(!leido.toLowerCase().equals("ok")){
+			while(!leido.toLowerCase().equals("ok") && indice!=-1){
 				salida = "";	// Se inicializa la salida.
 				despReal = alfFrec[indice][0]-maxFrec;	// Se calcula el desplazamiento.
 				if(despReal < 0){		// Si es negativo se pasa a positivo.
@@ -100,10 +116,15 @@ public class coa_caesar {
 				leido = entrada.nextLine();	// Se lee la entrada del teclado.
 			}
 			entrada.close();		// Se cierra la entrada.
-			// Se escriben los datos en el fichero de salida.
-			descifrado.println(nombre);
-			descifrado.println("Desplazamiento = " + despMostrar);
-			descifrado.println(salida);
+			if(indice == -1){
+				System.out.println("No se ha tenido éxito con ningún desplazamiento");
+			} else{
+				// Se escriben los datos en el fichero de salida.
+				descifrado.println(nombre);
+				descifrado.println("Idioma = " + idioma);
+				descifrado.println("Desplazamiento = " + despMostrar);
+				descifrado.println(salida);
+			}
 			descifrado.close();		// Se cierra la salida.
 		} catch(IOException e){		// Se muestra la posible excepción.
 			System.err.println("Error con el fichero de salida.");

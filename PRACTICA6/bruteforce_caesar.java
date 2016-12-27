@@ -1,4 +1,3 @@
-package practica6;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -31,6 +30,9 @@ public class bruteforce_caesar {
 			// Se descifra probando todos los desplazamientos.
 			for(int i = 0; i<=25 && !correcto;i++) {
 				descifrar(texto,i);
+			}
+			if(!correcto){
+				System.out.println("No se ha tenido éxito con ningún desplazamiento");
 			}
 		} catch(FileNotFoundException e) {		// Se muestra la posible excepción.
 			System.err.println("Fichero no encontrado");
