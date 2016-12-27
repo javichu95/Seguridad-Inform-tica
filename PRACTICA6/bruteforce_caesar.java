@@ -1,4 +1,4 @@
-
+package practica6;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -44,10 +44,10 @@ public class bruteforce_caesar {
 	private static void descifrar(String texto, int caracter) {
 		caracter = caracter +'A';		// Se asigna el caracter inicial.
 		int desplazamiento;
-		if(texto.charAt(0) > caracter) {		// Se calcula el desplazamiento.
-			desplazamiento = texto.charAt(0) - caracter;
-		} else {
-			desplazamiento = caracter - texto.charAt(0);
+		desplazamiento = caracter - texto.charAt(0);
+		//Si es negativo significa que da la vuelta.
+		if(desplazamiento < 0) {
+			desplazamiento = 26 + desplazamiento;
 		}
 		String descifrado = "";		// String del texto descifrado.
 		for(int i = 0; i < texto.length(); i++) {	// Se recorren los distintos caracteres.
