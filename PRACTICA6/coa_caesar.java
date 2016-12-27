@@ -22,13 +22,14 @@ public class coa_caesar {
 			System.exit(1);
 		}
 	
-		nombre = args[1];		// Se guarda el nombre del fichero.
+		nombre = args[0];		// Se guarda el nombre del fichero.
 		
 		Scanner texto = null; 	// Scanner para leer la entrada.
 		try{
 			texto = new Scanner(new File(nombre));	// Se asocia al fichero.
 		} catch(IOException e){		// Se capturan las posibles excepciones.
 			System.err.println("Error con el fichero de entrada.");
+			System.exit(1);
 		}
 		// Se rellena la tabla con los valores iniciales.
 		for(int i=0; i<alfFrec.length; i++){
@@ -100,11 +101,13 @@ public class coa_caesar {
 			}
 			entrada.close();		// Se cierra la entrada.
 			// Se escriben los datos en el fichero de salida.
+			descifrado.println(nombre);
 			descifrado.println("Desplazamiento = " + despMostrar);
 			descifrado.println(salida);
 			descifrado.close();		// Se cierra la salida.
 		} catch(IOException e){		// Se muestra la posible excepción.
 			System.err.println("Error con el fichero de salida.");
+			System.exit(1);
 		}
 				
 	}

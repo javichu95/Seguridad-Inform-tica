@@ -1,6 +1,9 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class bruteforce_caesar {
@@ -8,6 +11,7 @@ public class bruteforce_caesar {
 	private static Scanner fic;
 	private static boolean correcto = false;
 	private static Scanner entrada = new Scanner(System.in);
+	private static String nombre = null;		// Nombre del fichero de entrada.
 	
 	/*
 	 * Método princpial que realiza el descifrado de César por fuerza bruta.
@@ -18,6 +22,7 @@ public class bruteforce_caesar {
 			System.exit(1);
 		}
 		try {
+			nombre = args[0];	// Se guarda el nombre del fichero.
 			fic = new Scanner(new File(args[0]));	// Se crea el scanner de entrada.
 			String texto = "";		// Texto total leido del fichero.
 			while(fic.hasNextLine()) {		// Se leen todas las líneas del fichero.
@@ -60,12 +65,25 @@ public class bruteforce_caesar {
 			}
 		}
 		// Se muestra por pantalla el desplazamiento utilizado y el texto descifrado.
-		System.out.println("Desplazamiento utilizado: " + desplazamiento);
+		System.out.println("Desplazamiento: " + desplazamiento);
 		System.out.println("Si el descifrado es correcto introduzca 'Ok' (si no introduzca cualquier cosa):\n"+descifrado);
 		String respuesta = entrada.nextLine();	// Se lee la respuesta del usuario.
 		respuesta = respuesta.toLowerCase();
 		if(respuesta.equals("ok")) {
 			correcto = true;		// Se asigna el valor a la variable según la respuesta.
+			try{
+				// Se asigna al objeto el nombre del fichero.
+				PrintWriter salida = new PrintWriter(new FileWriter(
+						nombre.substring(0,nombre.lastIndexOf("."))+"Dec.txt"));
+				// Se escriben los datos en el fichero de salida.
+				salida.println(nombre);
+				salida.println("Desplazamiento = " + desplazamiento);
+				salida.println(descifrado);
+				salida.close();		// Se cierra la salida.
+			} catch(IOException e){
+				System.err.println("Error con el fichero de salida.");
+				System.exit(1);
+			}
 		}
 	}
 }
